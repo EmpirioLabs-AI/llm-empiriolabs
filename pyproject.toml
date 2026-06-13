@@ -1,0 +1,34 @@
+[project]
+name = "llm-empiriolabs"
+version = "0.1.0"
+description = "Access EmpirioLabs models via the llm CLI"
+readme = "README.md"
+authors = [{ name = "EmpirioLabs", email = "support@empiriolabs.ai" }]
+license = { text = "Apache-2.0" }
+requires-python = ">=3.9"
+classifiers = [
+    "License :: OSI Approved :: Apache Software License"
+]
+dependencies = [
+    "llm>=0.19"
+]
+
+[project.urls]
+Homepage = "https://empiriolabs.ai"
+Documentation = "https://docs.empiriolabs.ai"
+Repository = "https://github.com/EmpirioLabs-ai/llm-empiriolabs"
+Issues = "https://github.com/EmpirioLabs-ai/llm-empiriolabs/issues"
+Changelog = "https://github.com/EmpirioLabs-ai/llm-empiriolabs/releases"
+
+[project.entry-points.llm]
+empiriolabs = "llm_empiriolabs"
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-httpx"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["llm_empiriolabs"]

@@ -1,0 +1,28 @@
+name: Publish to PyPI
+
+# Token-free publishing via PyPI Trusted Publishing (OIDC).
+# Configure the trusted publisher on PyPI first (see HANDOFF.md), then run
+# this workflow (release published, or manual "Run workflow").
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build sdist and wheel
+        run: |
+          python -m pip install --upgrade build
+          python -m build
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
