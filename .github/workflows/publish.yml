@@ -1,28 +1,55 @@
 name: Publish to PyPI
 
-# Token-free publishing via PyPI Trusted Publishing (OIDC).
-# Configure the trusted publisher on PyPI first (see HANDOFF.md), then run
-# this workflow (release published, or manual "Run workflow").
+# Token-free publishing via PyPI Trusted Publishing (OIDC). The trusted
+# publisher on PyPI names this file (publish.yml) and the `pypi` environment,
+# which needs an owner's approval. Runs when a release is published, or from
+# "Run workflow".
+#
+# Two jobs, so nothing installed for the build can publish: `build` has a
+# read-only token, installs only the hash-locked build tools in
+# .github/build-requirements.txt (releases at least 7 days old) and builds
+# without fetching anything else; `publish` holds the OIDC permission and runs
+# only PyPI's own pinned action on the built files.
 
 on:
   release:
     types: [published]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  build-and-publish:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Install the locked build tools
+        run: python -m pip install --require-hashes --no-deps -r .github/build-requirements.txt
+      - name: Build sdist and wheel
+        run: python -m build --no-isolation
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: build
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
-      id-token: write
+      id-token: write # trusted publishing, and PyPI's attestations for the files
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          python-version: "3.12"
-      - name: Build sdist and wheel
-        run: |
-          python -m pip install --upgrade build
-          python -m build
+          name: dist
+          path: dist
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
