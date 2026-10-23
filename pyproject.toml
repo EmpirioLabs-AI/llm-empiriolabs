@@ -1,9 +1,9 @@
 [project]
 name = "llm-empiriolabs"
-version = "0.1.0"
-description = "Access EmpirioLabs models via the llm CLI"
+version = "0.1.1"
+description = "Access EmpirioLabs AI models from the llm CLI"
 readme = "README.md"
-authors = [{ name = "EmpirioLabs", email = "support@empiriolabs.ai" }]
+authors = [{ name = "EmpirioLabs AI", email = "support@empiriolabs.ai" }]
 license = { text = "Apache-2.0" }
 requires-python = ">=3.9"
 classifiers = [
@@ -16,9 +16,9 @@ dependencies = [
 [project.urls]
 Homepage = "https://empiriolabs.ai"
 Documentation = "https://docs.empiriolabs.ai"
-Repository = "https://github.com/EmpirioLabs-ai/llm-empiriolabs"
-Issues = "https://github.com/EmpirioLabs-ai/llm-empiriolabs/issues"
-Changelog = "https://github.com/EmpirioLabs-ai/llm-empiriolabs/releases"
+Repository = "https://github.com/EmpirioLabs-AI/llm-empiriolabs"
+Issues = "https://github.com/EmpirioLabs-AI/llm-empiriolabs/issues"
+Changelog = "https://github.com/EmpirioLabs-AI/llm-empiriolabs/releases"
 
 [project.entry-points.llm]
 empiriolabs = "llm_empiriolabs"

@@ -2,9 +2,9 @@
 
 [![PyPI](https://img.shields.io/pypi/v/llm-empiriolabs.svg)](https://pypi.org/project/llm-empiriolabs/)
 
-[LLM](https://llm.datasette.io/) plugin for accessing [EmpirioLabs](https://empiriolabs.ai) models.
+[LLM](https://llm.datasette.io/) plugin for accessing [EmpirioLabs AI](https://empiriolabs.ai) models.
 
-EmpirioLabs serves frontier open models (Qwen3, DeepSeek V4, GLM-5.1, Kimi K2.7 Code, MiniMax M3, and more) through one OpenAI-compatible API. Browse the full catalog at [docs.empiriolabs.ai](https://docs.empiriolabs.ai).
+EmpirioLabs AI is specialized AI model hosting for open, proprietary, and custom stacks. Its chat models include Qwen3, DeepSeek V4, GLM-5.1, Kimi K2.7 Code and MiniMax M3; browse the full catalog at [docs.empiriolabs.ai](https://docs.empiriolabs.ai).
 
 ## Installation
 
@@ -27,7 +27,7 @@ You can also set the `EMPIRIOLABS_API_KEY` environment variable instead.
 
 ## Usage
 
-List the available EmpirioLabs models:
+List the available EmpirioLabs AI models:
 
 ```bash
 llm models list | grep -i empiriolabs
@@ -56,7 +56,7 @@ The plugin fetches the live model list from `https://api.empiriolabs.ai/v1/model
 - `empiriolabs/qwen3-7-plus`
 - `empiriolabs/qwen3-7-max`
 - `empiriolabs/deepseek-v4-pro`
-- `empiriolabs/deepseek-v4-flash`
+- `empiriolabs/deepseek-v4-1-flash`
 - `empiriolabs/glm-5-1`
 - `empiriolabs/kimi-k2-7-code`
 - `empiriolabs/minimax-m3`

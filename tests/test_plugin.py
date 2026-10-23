@@ -15,7 +15,7 @@ def test_fallback_models_are_real_slugs():
         "qwen3-7-plus",
         "qwen3-7-max",
         "deepseek-v4-pro",
-        "deepseek-v4-flash",
+        "deepseek-v4-1-flash",
         "glm-5-1",
         "kimi-k2-7-code",
         "minimax-m3",
