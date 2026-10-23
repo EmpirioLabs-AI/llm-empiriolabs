@@ -7,7 +7,7 @@ name: Publish to PyPI
 #
 # Two jobs, so nothing installed for the build can publish: `build` has a
 # read-only token, installs only the hash-locked build tools in
-# .github/build-requirements.txt (releases at least 7 days old) and builds
+# .github/build-requirements.txt and builds
 # without fetching anything else; `publish` holds the OIDC permission and runs
 # only PyPI's own pinned action on the built files.
 
