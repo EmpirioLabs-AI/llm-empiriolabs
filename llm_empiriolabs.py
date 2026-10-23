@@ -1,12 +1,12 @@
-"""llm plugin for EmpirioLabs.
+"""llm plugin for EmpirioLabs AI.
 
-EmpirioLabs serves frontier open models through one OpenAI-compatible API at
-https://api.empiriolabs.ai/v1 . This plugin registers those models with Simon
-Willison's ``llm`` CLI.
+Registers the chat models in the live EmpirioLabs AI catalog
+(https://api.empiriolabs.ai/v1/models) with Simon Willison's ``llm`` CLI.
 """
 
 import json
 import time
+import urllib.request
 from pathlib import Path
 
 import llm
@@ -42,12 +42,12 @@ def fetch_cached_json(url, path, cache_timeout, headers=None):
         mod_time = path.stat().st_mtime
         if time.time() - mod_time < cache_timeout:
             return json.loads(path.read_text())
+    # The standard library, not httpx: llm 0.36 and openai 3 depend on httpx2, so
+    # `import httpx` failed in a current install and only the fallback list showed.
     try:
-        import httpx
-
-        response = httpx.get(url, headers=headers or {}, follow_redirects=True)
-        response.raise_for_status()
-        data = response.json()
+        request = urllib.request.Request(url, headers={"User-Agent": "llm-empiriolabs", **(headers or {})})
+        with urllib.request.urlopen(request, timeout=30) as response:
+            data = json.loads(response.read().decode("utf-8"))
         path.write_text(json.dumps(data))
         return data
     except Exception:
@@ -68,7 +68,13 @@ def get_model_ids(key=None, skip_cache=False):
             headers=headers,
         )
         models = data.get("data", data) if isinstance(data, dict) else data
-        ids = [m["id"] for m in models if isinstance(m, dict) and m.get("id")]
+        # Only models that answer chat completions: the catalog also lists image,
+        # video, speech and other models that this plugin cannot run.
+        ids = [
+            m["id"]
+            for m in models
+            if isinstance(m, dict) and m.get("id") and "POST /v1/chat/completions" in (m.get("supported_endpoints") or [])
+        ]
         if ids:
             return ids
     except Exception:
@@ -88,7 +94,7 @@ class _EmpirioLabsChat:
         )
 
     def __str__(self):
-        return "EmpirioLabs: {}".format(self.model_id)
+        return "EmpirioLabs AI: {}".format(self.model_id)
 
 
 class EmpirioLabsChat(_EmpirioLabsChat, Chat):
