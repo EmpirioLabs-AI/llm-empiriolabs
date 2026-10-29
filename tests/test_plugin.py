@@ -13,30 +13,21 @@ def test_api_base_constant():
     assert llm_empiriolabs.API_BASE == "https://api.empiriolabs.ai/v1"
 
 
-def test_fallback_models_are_real_slugs():
-    # These must match the EmpirioLabs catalog.
-    expected = {
-        "qwen3-7-plus",
-        "qwen3-7-max",
-        "deepseek-v4-pro",
-        "deepseek-v4-1-flash",
-        "glm-5-1",
-        "kimi-k2-7-code",
-        "minimax-m3",
-    }
-    assert set(llm_empiriolabs.FALLBACK_MODELS) == expected
+def test_no_model_list_lives_in_code():
+    # Models come only from the live catalog or its cache; a list in code goes stale.
+    assert llm_empiriolabs.FALLBACK_MODELS == ()
 
 
 def test_chat_class_config():
-    model = llm_empiriolabs.EmpirioLabsChat("qwen3-7-plus")
+    model = llm_empiriolabs.EmpirioLabsChat("example-model")
     assert model.needs_key == "empiriolabs"
     assert model.key_env_var == "EMPIRIOLABS_API_KEY"
     assert model.api_base == "https://api.empiriolabs.ai/v1"
-    assert model.model_id == "empiriolabs/qwen3-7-plus"
-    assert str(model) == "EmpirioLabs AI: empiriolabs/qwen3-7-plus"
+    assert model.model_id == "empiriolabs/example-model"
+    assert str(model) == "EmpirioLabs AI: empiriolabs/example-model"
 
 
-def test_get_model_ids_falls_back_when_the_catalog_is_unreachable(monkeypatch, tmp_path):
+def test_get_model_ids_is_empty_when_the_catalog_is_unreachable_and_uncached(monkeypatch, tmp_path):
     monkeypatch.setattr(llm, "user_dir", lambda: tmp_path)
 
     def refuse(*args, **kwargs):
@@ -44,7 +35,7 @@ def test_get_model_ids_falls_back_when_the_catalog_is_unreachable(monkeypatch, t
 
     monkeypatch.setattr(llm_empiriolabs.urllib.request, "urlopen", refuse)
     ids = llm_empiriolabs.get_model_ids(key=None, skip_cache=True)
-    assert ids == list(llm_empiriolabs.FALLBACK_MODELS)
+    assert ids == []
 
 
 def test_get_model_ids_reads_chat_models_from_the_live_catalog(monkeypatch, tmp_path):

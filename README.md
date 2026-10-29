@@ -4,7 +4,7 @@
 
 [LLM](https://llm.datasette.io/) plugin for accessing [EmpirioLabs AI](https://empiriolabs.ai) models.
 
-EmpirioLabs AI is specialized AI model hosting for open, proprietary, and custom stacks. Its chat models include Qwen3, DeepSeek V4, GLM-5.1, Kimi K2.7 Code and MiniMax M3; browse the full catalog at [docs.empiriolabs.ai](https://docs.empiriolabs.ai).
+EmpirioLabs AI is specialized AI model hosting for open, proprietary, and custom stacks. Every model it serves is listed, with its ID and price, in the live catalog at [empiriolabs.ai/models](https://empiriolabs.ai/models).
 
 ## Installation
 
@@ -36,30 +36,23 @@ llm models list | grep -i empiriolabs
 Run a prompt:
 
 ```bash
-llm -m empiriolabs/qwen3-7-plus "Five surprising facts about octopuses"
+llm models list | grep empiriolabs
+llm -m empiriolabs/MODEL_ID "Five surprising facts about octopuses"
 ```
 
 Start an interactive chat:
 
 ```bash
-llm chat -m empiriolabs/deepseek-v4-pro
+llm chat -m empiriolabs/MODEL_ID
 ```
 
 Pipe content in:
 
 ```bash
-cat article.txt | llm -m empiriolabs/glm-5-1 "Summarize this in three bullet points"
+cat article.txt | llm -m empiriolabs/MODEL_ID "Summarize this in three bullet points"
 ```
 
-The plugin fetches the live model list from `https://api.empiriolabs.ai/v1/models` on first use (cached for an hour). If that call is unavailable it falls back to a built-in list of popular slugs:
-
-- `empiriolabs/qwen3-7-plus`
-- `empiriolabs/qwen3-7-max`
-- `empiriolabs/deepseek-v4-pro`
-- `empiriolabs/deepseek-v4-1-flash`
-- `empiriolabs/glm-5-1`
-- `empiriolabs/kimi-k2-7-code`
-- `empiriolabs/minimax-m3`
+Replace `MODEL_ID` with any chat model ID from [empiriolabs.ai/models](https://empiriolabs.ai/models). The plugin reads the live model list from `https://api.empiriolabs.ai/v1/models` (cached for an hour, and the cached copy is used when the call fails), so `llm models list` always shows the current chat models.
 
 ## Development
 

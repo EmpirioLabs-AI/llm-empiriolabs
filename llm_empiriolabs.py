@@ -22,17 +22,10 @@ except ImportError:  # pragma: no cover
 
 API_BASE = "https://api.empiriolabs.ai/v1"
 
-# Fallback catalog used when the live /v1/models call is unavailable. The
-# authoritative list is always GET https://api.empiriolabs.ai/v1/models .
-FALLBACK_MODELS = (
-    "qwen3-7-plus",
-    "qwen3-7-max",
-    "deepseek-v4-pro",
-    "deepseek-v4-1-flash",
-    "glm-5-1",
-    "kimi-k2-7-code",
-    "minimax-m3",
-)
+# No model list lives in code: one goes stale as models are added and retired (one here named a retired model,
+# 2026-10-29). The models come only from GET https://api.empiriolabs.ai/v1/models, or from its cached copy when
+# that call fails; with neither, the plugin registers no models (a run could not reach the API anyway).
+FALLBACK_MODELS = ()
 
 
 def fetch_cached_json(url, path, cache_timeout, headers=None):
