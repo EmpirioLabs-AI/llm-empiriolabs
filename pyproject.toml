@@ -1,6 +1,6 @@
 [project]
 name = "llm-empiriolabs"
-version = "0.1.3"
+version = "0.1.4"
 description = "Access EmpirioLabs AI models from the llm CLI"
 readme = "README.md"
 authors = [{ name = "EmpirioLabs AI", email = "support@empiriolabs.ai" }]
@@ -19,6 +19,9 @@ Documentation = "https://docs.empiriolabs.ai"
 Repository = "https://github.com/EmpirioLabs-AI/llm-empiriolabs"
 Issues = "https://github.com/EmpirioLabs-AI/llm-empiriolabs/issues"
 Changelog = "https://github.com/EmpirioLabs-AI/llm-empiriolabs/releases"
+X = "https://x.com/empiriolabsai"
+LinkedIn = "https://www.linkedin.com/company/empirio-labs-ai"
+Discord = "https://discord.gg/bM52azW4ZD"
 
 [project.entry-points.llm]
 empiriolabs = "llm_empiriolabs"
